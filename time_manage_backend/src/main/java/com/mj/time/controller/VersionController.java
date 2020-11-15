@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/time/version")
+@RequestMapping("/api/time/version")
 public class VersionController {
     @GetMapping
     CommonResponse<String> getAllMenu() {
