@@ -1,6 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://47.105.163.206:3306/order_staging?characterEncoding=UTF-8&nullCatalogMeansCurrent=true
-    username: vinson
-    password: Aa123456
+    url: jdbc:mysql://47.105.163.206:3306/time_manage?characterEncoding=UTF-8&nullCatalogMeansCurrent=true
+    username: root
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.mj.time.domain

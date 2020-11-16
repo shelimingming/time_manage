@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mj.time.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.mj.time.domain.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="headimg" jdbcType="VARCHAR" property="headimg" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modify_time" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, password, mobile, nickname, sex, birthday, headimg, status, create_time, 
+    modify_time, bak1, bak2, bak3
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mj.time.domain.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user (username, password, mobile, 
+      nickname, sex, birthday, 
+      headimg, status, create_time, 
+      modify_time, bak1, bak2, 
+      bak3)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=DATE}, 
+      #{headimg,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{modify_time,jdbcType=TIMESTAMP}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+      #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mj.time.domain.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="headimg != null">
+        headimg,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="create_time != null">
+        create_time,
+      </if>
+      <if test="modify_time != null">
+        modify_time,
+      </if>
+      <if test="bak1 != null">
+        bak1,
+      </if>
+      <if test="bak2 != null">
+        bak2,
+      </if>
+      <if test="bak3 != null">
+        bak3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="headimg != null">
+        #{headimg,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="create_time != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modify_time != null">
+        #{modify_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bak1 != null">
+        #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mj.time.domain.User">
+    update t_user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="headimg != null">
+        headimg = #{headimg,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="create_time != null">
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modify_time != null">
+        modify_time = #{modify_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bak1 != null">
+        bak1 = #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mj.time.domain.User">
+    update t_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      birthday = #{birthday,jdbcType=DATE},
+      headimg = #{headimg,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_time = #{create_time,jdbcType=TIMESTAMP},
+      modify_time = #{modify_time,jdbcType=TIMESTAMP},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatchSelective" parameterType="java.util.List">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="list[0].id!=null">
+        id,
+      </if>
+      <if test="list[0].username!=null">
+        username,
+      </if>
+      <if test="list[0].password!=null">
+        password,
+      </if>
+      <if test="list[0].mobile!=null">
+        mobile,
+      </if>
+      <if test="list[0].nickname!=null">
+        nickname,
+      </if>
+      <if test="list[0].sex!=null">
+        sex,
+      </if>
+      <if test="list[0].birthday!=null">
+        birthday,
+      </if>
+      <if test="list[0].headimg!=null">
+        headimg,
+      </if>
+      <if test="list[0].status!=null">
+        status,
+      </if>
+      <if test="list[0].create_time!=null">
+        create_time,
+      </if>
+      <if test="list[0].modify_time!=null">
+        modify_time,
+      </if>
+      <if test="list[0].bak1!=null">
+        bak1,
+      </if>
+      <if test="list[0].bak2!=null">
+        bak2,
+      </if>
+      <if test="list[0].bak3!=null">
+        bak3,
+      </if>
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator=",">
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+        <if test="item.id!=null">
+          #{item.id,jdbcType=INTEGER},
+        </if>
+        <if test="item.username!=null">
+          #{item.username,jdbcType=VARCHAR},
+        </if>
+        <if test="item.password!=null">
+          #{item.password,jdbcType=VARCHAR},
+        </if>
+        <if test="item.mobile!=null">
+          #{item.mobile,jdbcType=VARCHAR},
+        </if>
+        <if test="item.nickname!=null">
+          #{item.nickname,jdbcType=VARCHAR},
+        </if>
+        <if test="item.sex!=null">
+          #{item.sex,jdbcType=TINYINT},
+        </if>
+        <if test="item.birthday!=null">
+          #{item.birthday,jdbcType=DATE},
+        </if>
+        <if test="item.headimg!=null">
+          #{item.headimg,jdbcType=VARCHAR},
+        </if>
+        <if test="item.status!=null">
+          #{item.status,jdbcType=TINYINT},
+        </if>
+        <if test="item.create_time!=null">
+          #{item.create_time,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modify_time!=null">
+          #{item.modify_time,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.bak1!=null">
+          #{item.bak1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bak2!=null">
+          #{item.bak2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bak3!=null">
+          #{item.bak3,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach collection="list" index="index" item="item" separator=";">
+      update t_user
+      <set>
+        <if test="item.username!=null">
+          username=#{item.username,jdbcType=VARCHAR},
+        </if>
+        <if test="item.password!=null">
+          password=#{item.password,jdbcType=VARCHAR},
+        </if>
+        <if test="item.mobile!=null">
+          mobile=#{item.mobile,jdbcType=VARCHAR},
+        </if>
+        <if test="item.nickname!=null">
+          nickname=#{item.nickname,jdbcType=VARCHAR},
+        </if>
+        <if test="item.sex!=null">
+          sex=#{item.sex,jdbcType=TINYINT},
+        </if>
+        <if test="item.birthday!=null">
+          birthday=#{item.birthday,jdbcType=DATE},
+        </if>
+        <if test="item.headimg!=null">
+          headimg=#{item.headimg,jdbcType=VARCHAR},
+        </if>
+        <if test="item.status!=null">
+          status=#{item.status,jdbcType=TINYINT},
+        </if>
+        <if test="item.create_time!=null">
+          create_time=#{item.create_time,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.modify_time!=null">
+          modify_time=#{item.modify_time,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.bak1!=null">
+          bak1=#{item.bak1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bak2!=null">
+          bak2=#{item.bak2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bak3!=null">
+          bak3=#{item.bak3,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where 
+      id = #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>
