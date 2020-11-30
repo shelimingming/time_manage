@@ -35,10 +35,16 @@ public class User implements Serializable {
     private String nickname;
 
     /**
-     * 性别 0:男 1:女
+     * 性别 0:未知 1:男 2:女
      * 表字段 : t_user.sex
      */
     private Byte sex;
+
+    /**
+     * 地址
+     * 表字段 : t_user.address
+     */
+    private String address;
 
     /**
      * 生日
@@ -62,13 +68,19 @@ public class User implements Serializable {
      * 创建时间
      * 表字段 : t_user.create_time
      */
-    private Date create_time;
+    private Date createTime;
 
     /**
      * 更新时间
      * 表字段 : t_user.modify_time
      */
-    private Date modify_time;
+    private Date modifyTime;
+
+    /**
+     * 微信openid
+     * 表字段 : t_user.wx_open_id
+     */
+    private String wxOpenId;
 
     /**
      * 
@@ -187,21 +199,39 @@ public class User implements Serializable {
     }
 
     /**
-     * 获取 性别 0:男 1:女 字段:t_user.sex
+     * 获取 性别 0:未知 1:男 2:女 字段:t_user.sex
      *
-     * @return t_user.sex, 性别 0:男 1:女
+     * @return t_user.sex, 性别 0:未知 1:男 2:女
      */
     public Byte getSex() {
         return sex;
     }
 
     /**
-     * 设置 性别 0:男 1:女 字段:t_user.sex
+     * 设置 性别 0:未知 1:男 2:女 字段:t_user.sex
      *
-     * @param sex the value for t_user.sex, 性别 0:男 1:女
+     * @param sex the value for t_user.sex, 性别 0:未知 1:男 2:女
      */
     public void setSex(Byte sex) {
         this.sex = sex;
+    }
+
+    /**
+     * 获取 地址 字段:t_user.address
+     *
+     * @return t_user.address, 地址
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * 设置 地址 字段:t_user.address
+     *
+     * @param address the value for t_user.address, 地址
+     */
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 
     /**
@@ -263,17 +293,17 @@ public class User implements Serializable {
      *
      * @return t_user.create_time, 创建时间
      */
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
      * 设置 创建时间 字段:t_user.create_time
      *
-     * @param create_time the value for t_user.create_time, 创建时间
+     * @param createTime the value for t_user.create_time, 创建时间
      */
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
@@ -281,17 +311,35 @@ public class User implements Serializable {
      *
      * @return t_user.modify_time, 更新时间
      */
-    public Date getModify_time() {
-        return modify_time;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
     /**
      * 设置 更新时间 字段:t_user.modify_time
      *
-     * @param modify_time the value for t_user.modify_time, 更新时间
+     * @param modifyTime the value for t_user.modify_time, 更新时间
      */
-    public void setModify_time(Date modify_time) {
-        this.modify_time = modify_time;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    /**
+     * 获取 微信openid 字段:t_user.wx_open_id
+     *
+     * @return t_user.wx_open_id, 微信openid
+     */
+    public String getWxOpenId() {
+        return wxOpenId;
+    }
+
+    /**
+     * 设置 微信openid 字段:t_user.wx_open_id
+     *
+     * @param wxOpenId the value for t_user.wx_open_id, 微信openid
+     */
+    public void setWxOpenId(String wxOpenId) {
+        this.wxOpenId = wxOpenId == null ? null : wxOpenId.trim();
     }
 
     /**

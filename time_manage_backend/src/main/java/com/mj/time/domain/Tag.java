@@ -38,13 +38,13 @@ public class Tag implements Serializable {
      * 创建时间
      * 表字段 : t_tag.create_time
      */
-    private Date create_time;
+    private Date createTime;
 
     /**
      * 更新时间
      * 表字段 : t_tag.modify_time
      */
-    private Date modify_time;
+    private Date modifyTime;
 
     /**
      * 
@@ -167,17 +167,17 @@ public class Tag implements Serializable {
      *
      * @return t_tag.create_time, 创建时间
      */
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
      * 设置 创建时间 字段:t_tag.create_time
      *
-     * @param create_time the value for t_tag.create_time, 创建时间
+     * @param createTime the value for t_tag.create_time, 创建时间
      */
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
@@ -185,17 +185,17 @@ public class Tag implements Serializable {
      *
      * @return t_tag.modify_time, 更新时间
      */
-    public Date getModify_time() {
-        return modify_time;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
     /**
      * 设置 更新时间 字段:t_tag.modify_time
      *
-     * @param modify_time the value for t_tag.modify_time, 更新时间
+     * @param modifyTime the value for t_tag.modify_time, 更新时间
      */
-    public void setModify_time(Date modify_time) {
-        this.modify_time = modify_time;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     /**

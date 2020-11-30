@@ -6,7 +6,6 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
-
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.mj.time.domain

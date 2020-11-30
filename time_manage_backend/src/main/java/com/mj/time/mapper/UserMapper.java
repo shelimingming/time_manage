@@ -34,6 +34,13 @@ public interface UserMapper {
     User selectByPrimaryKey(Integer id);
 
     /**
+     * 根据微信的openid查找用户
+     * @param wxOpenId
+     * @return
+     */
+    User selectByWXOpenId(String wxOpenId);
+
+    /**
      *  动态字段,根据主键来更新符合条件的数据库记录,t_user
      *
      * @param record

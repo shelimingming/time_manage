@@ -164,7 +164,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getUser" resultMap="com.mj.time.mapper.UserMapper.BaseResultMap">
-    select id,username,password,mobile,nickname,sex,birthday,headimg,status,create_time,modify_time,bak1,bak2,bak3 from t_user where user_id=#{userId}
+    select id,username,password,mobile,nickname,sex,address,birthday,headimg,status,create_time,modify_time,wx_open_id,bak1,bak2,bak3 from t_user where user_id=#{userId}
   </select>
   <select id="getTag" resultMap="com.mj.time.mapper.TagMapper.BaseResultMap">
     select id,name,color,type,creator,create_time,modify_time,bak1,bak2,bak3 from t_tag where tag_id=#{tagId}

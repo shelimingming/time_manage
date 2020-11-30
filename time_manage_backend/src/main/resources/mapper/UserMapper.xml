@@ -8,24 +8,32 @@
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="birthday" jdbcType="DATE" property="birthday" />
     <result column="headimg" jdbcType="VARCHAR" property="headimg" />
     <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
-    <result column="modify_time" jdbcType="TIMESTAMP" property="modify_time" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="wx_open_id" jdbcType="VARCHAR" property="wxOpenId" />
     <result column="bak1" jdbcType="VARCHAR" property="bak1" />
     <result column="bak2" jdbcType="VARCHAR" property="bak2" />
     <result column="bak3" jdbcType="VARCHAR" property="bak3" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, password, mobile, nickname, sex, birthday, headimg, status, create_time, 
-    modify_time, bak1, bak2, bak3
+    id, username, password, mobile, nickname, sex, address, birthday, headimg, status, 
+    create_time, modify_time, wx_open_id, bak1, bak2, bak3
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 'false' as QUERYID,
     <include refid="Base_Column_List" />
     from t_user
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByWXOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_user
+    where wx_open_id = #{wxOpenId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_user
@@ -36,15 +44,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_user (username, password, mobile, 
-      nickname, sex, birthday, 
-      headimg, status, create_time, 
-      modify_time, bak1, bak2, 
-      bak3)
+      nickname, sex, address, 
+      birthday, headimg, status, 
+      create_time, modify_time, wx_open_id, 
+      bak1, bak2, bak3)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
-      #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=DATE}, 
-      #{headimg,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{create_time,jdbcType=TIMESTAMP}, 
-      #{modify_time,jdbcType=TIMESTAMP}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
-      #{bak3,jdbcType=VARCHAR})
+      #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{address,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=DATE}, #{headimg,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{wxOpenId,jdbcType=VARCHAR}, 
+      #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.mj.time.domain.User">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -67,6 +75,9 @@
       <if test="sex != null">
         sex,
       </if>
+      <if test="address != null">
+        address,
+      </if>
       <if test="birthday != null">
         birthday,
       </if>
@@ -76,11 +87,14 @@
       <if test="status != null">
         status,
       </if>
-      <if test="create_time != null">
+      <if test="createTime != null">
         create_time,
       </if>
-      <if test="modify_time != null">
+      <if test="modifyTime != null">
         modify_time,
+      </if>
+      <if test="wxOpenId != null">
+        wx_open_id,
       </if>
       <if test="bak1 != null">
         bak1,
@@ -108,6 +122,9 @@
       <if test="sex != null">
         #{sex,jdbcType=TINYINT},
       </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
       <if test="birthday != null">
         #{birthday,jdbcType=DATE},
       </if>
@@ -117,11 +134,14 @@
       <if test="status != null">
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="create_time != null">
-        #{create_time,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="modify_time != null">
-        #{modify_time,jdbcType=TIMESTAMP},
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wxOpenId != null">
+        #{wxOpenId,jdbcType=VARCHAR},
       </if>
       <if test="bak1 != null">
         #{bak1,jdbcType=VARCHAR},
@@ -152,6 +172,9 @@
       <if test="sex != null">
         sex = #{sex,jdbcType=TINYINT},
       </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
       <if test="birthday != null">
         birthday = #{birthday,jdbcType=DATE},
       </if>
@@ -161,11 +184,14 @@
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="create_time != null">
-        create_time = #{create_time,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="modify_time != null">
-        modify_time = #{modify_time,jdbcType=TIMESTAMP},
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wxOpenId != null">
+        wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
       </if>
       <if test="bak1 != null">
         bak1 = #{bak1,jdbcType=VARCHAR},
@@ -186,11 +212,13 @@
       mobile = #{mobile,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=TINYINT},
+      address = #{address,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=DATE},
       headimg = #{headimg,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
-      create_time = #{create_time,jdbcType=TIMESTAMP},
-      modify_time = #{modify_time,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
       bak1 = #{bak1,jdbcType=VARCHAR},
       bak2 = #{bak2,jdbcType=VARCHAR},
       bak3 = #{bak3,jdbcType=VARCHAR}
@@ -217,6 +245,9 @@
       <if test="list[0].sex!=null">
         sex,
       </if>
+      <if test="list[0].address!=null">
+        address,
+      </if>
       <if test="list[0].birthday!=null">
         birthday,
       </if>
@@ -226,11 +257,14 @@
       <if test="list[0].status!=null">
         status,
       </if>
-      <if test="list[0].create_time!=null">
+      <if test="list[0].createTime!=null">
         create_time,
       </if>
-      <if test="list[0].modify_time!=null">
+      <if test="list[0].modifyTime!=null">
         modify_time,
+      </if>
+      <if test="list[0].wxOpenId!=null">
+        wx_open_id,
       </if>
       <if test="list[0].bak1!=null">
         bak1,
@@ -263,6 +297,9 @@
         <if test="item.sex!=null">
           #{item.sex,jdbcType=TINYINT},
         </if>
+        <if test="item.address!=null">
+          #{item.address,jdbcType=VARCHAR},
+        </if>
         <if test="item.birthday!=null">
           #{item.birthday,jdbcType=DATE},
         </if>
@@ -272,11 +309,14 @@
         <if test="item.status!=null">
           #{item.status,jdbcType=TINYINT},
         </if>
-        <if test="item.create_time!=null">
-          #{item.create_time,jdbcType=TIMESTAMP},
+        <if test="item.createTime!=null">
+          #{item.createTime,jdbcType=TIMESTAMP},
         </if>
-        <if test="item.modify_time!=null">
-          #{item.modify_time,jdbcType=TIMESTAMP},
+        <if test="item.modifyTime!=null">
+          #{item.modifyTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.wxOpenId!=null">
+          #{item.wxOpenId,jdbcType=VARCHAR},
         </if>
         <if test="item.bak1!=null">
           #{item.bak1,jdbcType=VARCHAR},
@@ -309,6 +349,9 @@
         <if test="item.sex!=null">
           sex=#{item.sex,jdbcType=TINYINT},
         </if>
+        <if test="item.address!=null">
+          address=#{item.address,jdbcType=VARCHAR},
+        </if>
         <if test="item.birthday!=null">
           birthday=#{item.birthday,jdbcType=DATE},
         </if>
@@ -318,11 +361,14 @@
         <if test="item.status!=null">
           status=#{item.status,jdbcType=TINYINT},
         </if>
-        <if test="item.create_time!=null">
-          create_time=#{item.create_time,jdbcType=TIMESTAMP},
+        <if test="item.createTime!=null">
+          create_time=#{item.createTime,jdbcType=TIMESTAMP},
         </if>
-        <if test="item.modify_time!=null">
-          modify_time=#{item.modify_time,jdbcType=TIMESTAMP},
+        <if test="item.modifyTime!=null">
+          modify_time=#{item.modifyTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.wxOpenId!=null">
+          wx_open_id=#{item.wxOpenId,jdbcType=VARCHAR},
         </if>
         <if test="item.bak1!=null">
           bak1=#{item.bak1,jdbcType=VARCHAR},
