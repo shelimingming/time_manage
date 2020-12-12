@@ -1,9 +1,10 @@
 {
   "pages": [
     "pages/login/login",
-    "pages/record/record",
     "pages/statistics/statistics",
-    "pages/my/my"
+    "pages/my/my",
+    "pages/record/record",
+    "pages/record/addRecord/addRecord"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

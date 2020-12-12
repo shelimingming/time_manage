@@ -46,7 +46,7 @@ App({
     let that = this;
     wx.login({
       success: function (loginRes) {
-        console.log("loginRes:",loginRes);
+        console.log("loginRes:", loginRes);
         if (loginRes.code) {
           /*
            * @desc: 获取用户信息 期望数据如下
@@ -63,18 +63,14 @@ App({
               console.log(infoRes);
               // 请求服务端的登录接口
               wx.request({
-                url: "https://www.magiccjumboo.top/api/time/auth/login",
+                url: "https://www.magiccjumboo.top/api/time/auth/wxlogin",
                 method: "POST",
                 data: {
-                  authType: "1", //1代表微信端登录
-                  userName: "",
-                  password: "",
                   code: loginRes.code, // 临时登录凭证
                   rawData: infoRes.rawData, // 用户非敏感信息
                   signature: infoRes.signature, // 签名
                   encryptedData: infoRes.encryptedData, // 用户敏感信息
                   iv: infoRes.iv, // 解密算法的向量
-                  token: wx.getStorageSync("loginFlag"),
                 },
 
                 success: function (res) {
@@ -87,7 +83,7 @@ App({
                       that.globalData.userInfo
                     );
                     wx.setStorageSync("userInfo", res.data.userInfo);
-                    wx.setStorageSync("loginFlag", res.data.token);
+                    wx.setStorageSync("token", res.data.token);
                     if (callback) {
                       callback();
                     }
@@ -167,15 +163,35 @@ App({
   },
 
   //切换到tab首页
-  switchTheTab: function () {
-    console.log("回调函数：callback swithcTheTab");
+  switchTheTab: function (pagePath) {
+    console.log("swithcTheTab" + pagePath);
     wx.switchTab({
-      url: "/pages/record/record",
+      url: pagePath,
       success: (result) => {
-        console.log(wx.getStorageSync("loginFlag"));
+        console.log(wx.getStorageSync("token"));
       },
-      fail: () => {},
-      complete: () => {},
+      fail: (result) => {
+        console.warn(result);
+      },
+      complete: (result) => {
+        console.warn(result);
+      },
+    });
+  },
+
+  navigateTo: function (pagePath) {
+    console.log("navigateTo" + pagePath);
+    wx.navigateTo({
+      url: pagePath,
+      success: (result) => {
+        console.log(wx.getStorageSync("token"));
+      },
+      fail: (result) => {
+        console.warn(result);
+      },
+      complete: (result) => {
+        console.warn(result);
+      },
     });
   },
 

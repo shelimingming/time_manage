@@ -2,6 +2,7 @@ package com.mj.time.mapper;
 
 import com.mj.time.domain.Record;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface RecordMapper {
@@ -32,6 +33,8 @@ public interface RecordMapper {
      * @param id
      */
     Record selectByPrimaryKey(Integer id);
+
+    List<Record> selectByMap(HashMap map);
 
     /**
      *  动态字段,根据主键来更新符合条件的数据库记录,t_record

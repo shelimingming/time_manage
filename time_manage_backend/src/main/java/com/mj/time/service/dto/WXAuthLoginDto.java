@@ -5,20 +5,7 @@ import com.mj.time.domain.User;
 import lombok.Data;
 
 @Data
-public class AuthUserDto {
-    /**
-     * 授权类型：0--WEB端 1--微信端
-     */
-    private String authType;
-
-    private String userName;
-
-    @JsonIgnore
-    private String password;
-
-    //**********************************
-    //以下为微信类传输字段
-
+public class WXAuthLoginDto {
     //临时登录凭证
     private String code;
 
@@ -48,9 +35,6 @@ public class AuthUserDto {
      */
     @JsonIgnore
     private String unionId;
-
-    //以上为微信类传输字段
-    //**********************************
 
     //服务器jwt token
     private String token;

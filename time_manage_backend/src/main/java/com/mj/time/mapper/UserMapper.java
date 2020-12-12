@@ -33,6 +33,8 @@ public interface UserMapper {
      */
     User selectByPrimaryKey(Integer id);
 
+    User selectByUserNameOrMobile(String usernameOrMobile);
+
     /**
      * 根据微信的openid查找用户
      * @param wxOpenId

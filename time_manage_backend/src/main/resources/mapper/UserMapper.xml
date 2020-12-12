@@ -29,6 +29,12 @@
     from t_user
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByUserNameOrMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_user
+    where username = #{usernameOrMobile,jdbcType=VARCHAR} or mobile = #{usernameOrMobile,jdbcType=VARCHAR}
+  </select>
   <select id="selectByWXOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 'false' as QUERYID,
     <include refid="Base_Column_List" />

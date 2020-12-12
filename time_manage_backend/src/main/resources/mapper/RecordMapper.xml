@@ -1,155 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mj.time.mapper.RecordMapper">
-  <resultMap id="BaseResultMap" type="com.mj.time.domain.Record">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
-    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
-    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
-    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
-    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
-    <association column="user_id" property="user" select="getUser" />
-    <association column="tag_id" property="tag" select="getTag" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.mj.time.domain.Record">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="tag_id" jdbcType="INTEGER" property="tagId"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="bak1" jdbcType="VARCHAR" property="bak1"/>
+        <result column="bak2" jdbcType="VARCHAR" property="bak2"/>
+        <result column="bak3" jdbcType="VARCHAR" property="bak3"/>
+        <association column="user_id" property="user" select="getUser"/>
+        <association column="tag_id" property="tag" select="getTag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, description, user_id, tag_id, begin_time, end_time, create_time, modify_time, 
     bak1, bak2, bak3
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 'false' as QUERYID,
-    <include refid="Base_Column_List" />
-    from t_record
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <sql id="Base_Column_List2">
+    t1.id, t1.description, t1.user_id, t1.tag_id, t1.begin_time, t1.end_time, t1.create_time, t1.modify_time,
+    t1.bak1, t1.bak2, t1.bak3
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select 'false' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from t_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByMap" parameterType="hashmap" resultMap="BaseResultMap">
+        select 'false' as QUERYID,
+        <include refid="Base_Column_List2"/>
+        from t_record t1, t_tag t2
+        <where>
+            <if test="1==1">
+                t1.tag_id = t2.id
+            </if>
+            <if test="userId !=null">
+                AND t1.user_id = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="beginTime !=null">
+                AND t1.end_time <![CDATA[ > ]]> #{beginTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime !=null">
+                AND t1.begin_time <![CDATA[ < ]]> #{endTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="tagId !=null">
+                AND t1.tag_id = #{tagId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_record
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.mj.time.domain.Record">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_record (description, user_id, tag_id, 
-      begin_time, end_time, create_time, 
-      modify_time, bak1, bak2, 
-      bak3)
-    values (#{description,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER}, 
-      #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
-      #{bak3,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.mj.time.domain.Record">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="description != null">
-        description,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="tagId != null">
-        tag_id,
-      </if>
-      <if test="beginTime != null">
-        begin_time,
-      </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="modifyTime != null">
-        modify_time,
-      </if>
-      <if test="bak1 != null">
-        bak1,
-      </if>
-      <if test="bak2 != null">
-        bak2,
-      </if>
-      <if test="bak3 != null">
-        bak3,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="description != null">
-        #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="tagId != null">
-        #{tagId,jdbcType=INTEGER},
-      </if>
-      <if test="beginTime != null">
-        #{beginTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null">
-        #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="bak1 != null">
-        #{bak1,jdbcType=VARCHAR},
-      </if>
-      <if test="bak2 != null">
-        #{bak2,jdbcType=VARCHAR},
-      </if>
-      <if test="bak3 != null">
-        #{bak3,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.mj.time.domain.Record">
-    update t_record
-    <set>
-      <if test="description != null">
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="tagId != null">
-        tag_id = #{tagId,jdbcType=INTEGER},
-      </if>
-      <if test="beginTime != null">
-        begin_time = #{beginTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null">
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="bak1 != null">
-        bak1 = #{bak1,jdbcType=VARCHAR},
-      </if>
-      <if test="bak2 != null">
-        bak2 = #{bak2,jdbcType=VARCHAR},
-      </if>
-      <if test="bak3 != null">
-        bak3 = #{bak3,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.mj.time.domain.Record">
+    <insert id="insert" parameterType="com.mj.time.domain.Record">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_record (description, user_id, tag_id,
+        begin_time, end_time, create_time,
+        modify_time, bak1, bak2,
+        bak3)
+        values (#{description,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER},
+        #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+        #{modifyTime,jdbcType=TIMESTAMP}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR},
+        #{bak3,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.mj.time.domain.Record">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="description != null">
+                description,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="tagId != null">
+                tag_id,
+            </if>
+            <if test="beginTime != null">
+                begin_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modifyTime != null">
+                modify_time,
+            </if>
+            <if test="bak1 != null">
+                bak1,
+            </if>
+            <if test="bak2 != null">
+                bak2,
+            </if>
+            <if test="bak3 != null">
+                bak3,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="tagId != null">
+                #{tagId,jdbcType=INTEGER},
+            </if>
+            <if test="beginTime != null">
+                #{beginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bak1 != null">
+                #{bak1,jdbcType=VARCHAR},
+            </if>
+            <if test="bak2 != null">
+                #{bak2,jdbcType=VARCHAR},
+            </if>
+            <if test="bak3 != null">
+                #{bak3,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.mj.time.domain.Record">
+        update t_record
+        <set>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="tagId != null">
+                tag_id = #{tagId,jdbcType=INTEGER},
+            </if>
+            <if test="beginTime != null">
+                begin_time = #{beginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bak1 != null">
+                bak1 = #{bak1,jdbcType=VARCHAR},
+            </if>
+            <if test="bak2 != null">
+                bak2 = #{bak2,jdbcType=VARCHAR},
+            </if>
+            <if test="bak3 != null">
+                bak3 = #{bak3,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.mj.time.domain.Record">
     update t_record
     set description = #{description,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
@@ -163,125 +191,125 @@
       bak3 = #{bak3,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="getUser" resultMap="com.mj.time.mapper.UserMapper.BaseResultMap">
-    select id,username,password,mobile,nickname,sex,address,birthday,headimg,status,create_time,modify_time,wx_open_id,bak1,bak2,bak3 from t_user where user_id=#{userId}
+    <select id="getUser" resultMap="com.mj.time.mapper.UserMapper.BaseResultMap">
+    select id,username,password,mobile,nickname,sex,address,birthday,headimg,status,create_time,modify_time,wx_open_id,bak1,bak2,bak3 from t_user where id=#{userId}
   </select>
-  <select id="getTag" resultMap="com.mj.time.mapper.TagMapper.BaseResultMap">
-    select id,name,color,type,creator,create_time,modify_time,bak1,bak2,bak3 from t_tag where tag_id=#{tagId}
+    <select id="getTag" resultMap="com.mj.time.mapper.TagMapper.BaseResultMap">
+    select id,name,color,type,creator,create_time,modify_time,bak1,bak2,bak3 from t_tag where id=#{tagId}
   </select>
-  <insert id="insertBatchSelective" parameterType="java.util.List">
-    insert into t_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="list[0].id!=null">
-        id,
-      </if>
-      <if test="list[0].description!=null">
-        description,
-      </if>
-      <if test="list[0].userId!=null">
-        user_id,
-      </if>
-      <if test="list[0].tagId!=null">
-        tag_id,
-      </if>
-      <if test="list[0].beginTime!=null">
-        begin_time,
-      </if>
-      <if test="list[0].endTime!=null">
-        end_time,
-      </if>
-      <if test="list[0].createTime!=null">
-        create_time,
-      </if>
-      <if test="list[0].modifyTime!=null">
-        modify_time,
-      </if>
-      <if test="list[0].bak1!=null">
-        bak1,
-      </if>
-      <if test="list[0].bak2!=null">
-        bak2,
-      </if>
-      <if test="list[0].bak3!=null">
-        bak3,
-      </if>
-    </trim>
-     values 
-    <foreach collection="list" index="index" item="item" separator=",">
-      <trim prefix=" (" suffix=")" suffixOverrides=",">
-        <if test="item.id!=null">
-          #{item.id,jdbcType=INTEGER},
-        </if>
-        <if test="item.description!=null">
-          #{item.description,jdbcType=VARCHAR},
-        </if>
-        <if test="item.userId!=null">
-          #{item.userId,jdbcType=INTEGER},
-        </if>
-        <if test="item.tagId!=null">
-          #{item.tagId,jdbcType=INTEGER},
-        </if>
-        <if test="item.beginTime!=null">
-          #{item.beginTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.endTime!=null">
-          #{item.endTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.createTime!=null">
-          #{item.createTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.modifyTime!=null">
-          #{item.modifyTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.bak1!=null">
-          #{item.bak1,jdbcType=VARCHAR},
-        </if>
-        <if test="item.bak2!=null">
-          #{item.bak2,jdbcType=VARCHAR},
-        </if>
-        <if test="item.bak3!=null">
-          #{item.bak3,jdbcType=VARCHAR},
-        </if>
-      </trim>
-    </foreach>
-  </insert>
-  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
-    <foreach collection="list" index="index" item="item" separator=";">
-      update t_record
-      <set>
-        <if test="item.description!=null">
-          description=#{item.description,jdbcType=VARCHAR},
-        </if>
-        <if test="item.userId!=null">
-          user_id=#{item.userId,jdbcType=INTEGER},
-        </if>
-        <if test="item.tagId!=null">
-          tag_id=#{item.tagId,jdbcType=INTEGER},
-        </if>
-        <if test="item.beginTime!=null">
-          begin_time=#{item.beginTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.endTime!=null">
-          end_time=#{item.endTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.createTime!=null">
-          create_time=#{item.createTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.modifyTime!=null">
-          modify_time=#{item.modifyTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.bak1!=null">
-          bak1=#{item.bak1,jdbcType=VARCHAR},
-        </if>
-        <if test="item.bak2!=null">
-          bak2=#{item.bak2,jdbcType=VARCHAR},
-        </if>
-        <if test="item.bak3!=null">
-          bak3=#{item.bak3,jdbcType=VARCHAR},
-        </if>
-      </set>
-      where 
-      id = #{item.id,jdbcType=INTEGER}
-    </foreach>
-  </update>
+    <insert id="insertBatchSelective" parameterType="java.util.List">
+        insert into t_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].id!=null">
+                id,
+            </if>
+            <if test="list[0].description!=null">
+                description,
+            </if>
+            <if test="list[0].userId!=null">
+                user_id,
+            </if>
+            <if test="list[0].tagId!=null">
+                tag_id,
+            </if>
+            <if test="list[0].beginTime!=null">
+                begin_time,
+            </if>
+            <if test="list[0].endTime!=null">
+                end_time,
+            </if>
+            <if test="list[0].createTime!=null">
+                create_time,
+            </if>
+            <if test="list[0].modifyTime!=null">
+                modify_time,
+            </if>
+            <if test="list[0].bak1!=null">
+                bak1,
+            </if>
+            <if test="list[0].bak2!=null">
+                bak2,
+            </if>
+            <if test="list[0].bak3!=null">
+                bak3,
+            </if>
+        </trim>
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            <trim prefix=" (" suffix=")" suffixOverrides=",">
+                <if test="item.id!=null">
+                    #{item.id,jdbcType=INTEGER},
+                </if>
+                <if test="item.description!=null">
+                    #{item.description,jdbcType=VARCHAR},
+                </if>
+                <if test="item.userId!=null">
+                    #{item.userId,jdbcType=INTEGER},
+                </if>
+                <if test="item.tagId!=null">
+                    #{item.tagId,jdbcType=INTEGER},
+                </if>
+                <if test="item.beginTime!=null">
+                    #{item.beginTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.endTime!=null">
+                    #{item.endTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.createTime!=null">
+                    #{item.createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.modifyTime!=null">
+                    #{item.modifyTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.bak1!=null">
+                    #{item.bak1,jdbcType=VARCHAR},
+                </if>
+                <if test="item.bak2!=null">
+                    #{item.bak2,jdbcType=VARCHAR},
+                </if>
+                <if test="item.bak3!=null">
+                    #{item.bak3,jdbcType=VARCHAR},
+                </if>
+            </trim>
+        </foreach>
+    </insert>
+    <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            update t_record
+            <set>
+                <if test="item.description!=null">
+                    description=#{item.description,jdbcType=VARCHAR},
+                </if>
+                <if test="item.userId!=null">
+                    user_id=#{item.userId,jdbcType=INTEGER},
+                </if>
+                <if test="item.tagId!=null">
+                    tag_id=#{item.tagId,jdbcType=INTEGER},
+                </if>
+                <if test="item.beginTime!=null">
+                    begin_time=#{item.beginTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.endTime!=null">
+                    end_time=#{item.endTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.createTime!=null">
+                    create_time=#{item.createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.modifyTime!=null">
+                    modify_time=#{item.modifyTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.bak1!=null">
+                    bak1=#{item.bak1,jdbcType=VARCHAR},
+                </if>
+                <if test="item.bak2!=null">
+                    bak2=#{item.bak2,jdbcType=VARCHAR},
+                </if>
+                <if test="item.bak3!=null">
+                    bak3=#{item.bak3,jdbcType=VARCHAR},
+                </if>
+            </set>
+            where
+            id = #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
 </mapper>

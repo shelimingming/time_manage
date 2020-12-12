@@ -3,6 +3,9 @@ package com.mj.time.common;
 public enum ErrorCodeEnum {
 
     SUCCESS("00000", "成功"),
+    TOKEN_ERROR("00001","token为空或token校验失败"),
+    USERNAME_OR_PASSWORD_ERROR("00002","用户名或密码错误"),
+    WECHAT_LOGIN_FAILED("00003","微信登录失败"),
 
     UNKNOW_ERROR("99999", "系统异常"),
     ;

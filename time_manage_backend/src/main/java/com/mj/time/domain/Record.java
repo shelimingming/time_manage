@@ -1,5 +1,7 @@
 package com.mj.time.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -32,12 +34,14 @@ public class Record implements Serializable {
      * 开始时间
      * 表字段 : t_record.begin_time
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private Date beginTime;
 
     /**
      * 结束时间
      * 表字段 : t_record.end_time
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private Date endTime;
 
     /**

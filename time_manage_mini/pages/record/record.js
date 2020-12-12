@@ -1,30 +1,51 @@
 // pages/record/record.js
+//获取app实例
+const app = getApp();
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    recordList: [123]
+  },
 
+  queryRecord: function () {
+    let that = this;
+    wx.request({
+      url: "https://www.magiccjumboo.top/api/time/record",
+      //url: "http://localhost:9999/api/time/record",
+      method: "GET",
+      header: {
+        token: wx.getStorageSync("token")
+      },
+      success: function (res) {
+        console.log("queryRecord:", res.data);
+        that.setData({
+          recordList: res.data.data
+        });
+        console.log(that.recordList);
+      },
+      fail: function (error) {
+        // 调用服务端登录接口失败
+        app.showInfo("调用接口失败");
+        console.log(error);
+      },
+    });
+  },
+
+  addRecord: function () {
+    console.log("点击+");
+    app.navigateTo("/pages/record/addRecord/addRecord");
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.request({
-      url: 'https://www.magiccjumboo.top/api/time/version', //仅为示例，并非真实的接口地址
-      data: {
-        x: '',
-        y: ''
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success (res) {
-        console.log(res)
-      }
-    })
+    let that = this;
+    that.queryRecord();
   },
 
   /**

@@ -1,119 +1,119 @@
 package com.mj.time.util;
 
-import com.mj.time.config.JwtSecurityProperties;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.io.Decoders;
+import javax.crypto.SecretKey;
+import java.util.Date;
+import java.util.Map;
 
-import java.security.Key;
-import java.util.*;
-import java.util.stream.Collectors;
-
-/**
- * Jwt工具类
- */
-
-@Slf4j
 @Component
-public class JwtTokenUtils implements InitializingBean {
+@Slf4j
+public class JwtTokenUtils {
+    /**
+     * 秘钥
+     */
+    @Value("${jwt.secret:52GLLfnJ30xJ0qCBgPMVUOatf4BUJvGMejJzXD418HQ=}")
+    private String secret;
+    /**
+     * 有效期，单位秒
+     * - 默认2周
+     */
+    @Value("${jwt.expire-time-in-second:1209600}")
+    private Long expirationTimeInSecond;
 
-    public final JwtSecurityProperties jwtSecurityProperties;
-    private static final String AUTHORITIES_KEY = "auth";
-    private Key key;
+    /**
+     * 为指定用户生成token
+     *
+     * @param claims 用户信息
+     * @return token
+     */
+    public String createToken(Map<String, Object> claims) {
+        Date createdTime = new Date();
+        Date expirationTime = this.getExpirationTime();
 
-    public JwtTokenUtils(JwtSecurityProperties jwtSecurityProperties) {
-        this.jwtSecurityProperties = jwtSecurityProperties;
-    }
+        byte[] keyBytes = secret.getBytes();
+        SecretKey key = Keys.hmacShaKeyFor(keyBytes);
 
-    @Override
-    public void afterPropertiesSet() {
-
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecurityProperties.getBase64Secret());
-        this.key = Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    public String createToken(String subject, Map<String, Object> claims) {
-        return Jwts.builder()
-                .setSubject(subject)
-                .claim(AUTHORITIES_KEY, claims)
-                .setId(UUID.randomUUID().toString())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtSecurityProperties.getTokenValidityInSeconds()))
-                .compressWith(CompressionCodecs.DEFLATE)
-                .signWith(key, SignatureAlgorithm.HS512)
+        String token = Jwts.builder()
+                .setClaims(claims)               //设置自定义属性
+                .setIssuedAt(createdTime)        //设置token创建时间
+                .setExpiration(expirationTime)   //设置token过期时间
+                .signWith(key, SignatureAlgorithm.HS256)  //// 支持的算法详见：https://github.com/jwtk/jjwt#features
                 .compact();
+
+        return token;
     }
 
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
+    /**
+     * 校验token
+     * @param token
+     * @return
+     */
+    public Boolean verifyToken(String token) {
+        byte[] keyBytes = secret.getBytes();
+        SecretKey key = Keys.hmacShaKeyFor(keyBytes);
+
         try {
-            final Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
-        } catch (Exception e) {
-            expiration = null;
-        }
-        return expiration;
-    }
-
-    public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(token)
-                .getBody();
-
-        if (claims.get(AUTHORITIES_KEY) != null) {
-            Collection<? extends GrantedAuthority> authorities =
-                    Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());
-
-            User principal = new User(claims.getSubject(), "", authorities);
-
-            return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-        } else {
-            return null;
-        }
-    }
-
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT signature.");
-            e.printStackTrace();
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token.");
-            e.printStackTrace();
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token.");
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            log.info("JWT token compact of handler are invalid.");
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private Claims getClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser()
+            Jws<Claims> jws = Jwts.parserBuilder()
                     .setSigningKey(key)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            claims = null;
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException ex) {
+            log.error("token:{},验证失败", token, ex);
+            return false;
         }
-        return claims;
+    }
+
+    /**
+     * 从token中获取claim
+     *
+     * @param token token
+     * @return claim
+     */
+    public Claims getClaimsFromToken(String token) {
+        byte[] keyBytes = secret.getBytes();
+        SecretKey key = Keys.hmacShaKeyFor(keyBytes);
+
+        try {
+            Jws<Claims> jws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            Claims claims = jws.getBody();
+            return claims;
+        } catch (JwtException ex) {
+            log.error("token:{},验证失败", token, ex);
+            throw new RuntimeException("token验证失败");
+        }
+    }
+
+    /**
+     * 生成随机合法密钥，然后手动保存到配置文件。密钥千万不能泄漏！！！
+     *
+     * @return
+     */
+    public String generateSecretString() {
+        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256); //or HS384 or HS512
+        String secretString = Encoders.BASE64.encode(key.getEncoded());
+        return secretString;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new JwtTokenUtils().generateSecretString());
+    }
+
+    /**
+     * 计算token的过期时间
+     *
+     * @return 过期时间
+     */
+    private Date getExpirationTime() {
+        return new Date(System.currentTimeMillis() + this.expirationTimeInSecond * 1000);
     }
 }

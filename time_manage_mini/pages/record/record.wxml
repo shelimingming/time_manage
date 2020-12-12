@@ -1,2 +1,6 @@
 <!--pages/record/record.wxml-->
-<text>pages/record/record.wxml</text>
+<view wx:for="{{recordList}}">
+  {{item.beginTime}}|{{item.endTime}}|{{item.description}}|{{item.tag.color}}
+</view>
+
+<button class="mini-btn" type="primary" size="mini" bindtap="addRecord">+</button>

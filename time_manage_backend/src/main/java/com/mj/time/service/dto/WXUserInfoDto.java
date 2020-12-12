@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class UserInfoDto {
+public class WXUserInfoDto {
     private String openId;
     private String nickName;
     private Integer gender;

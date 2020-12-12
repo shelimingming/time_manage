@@ -1,7 +1,10 @@
 package com.mj.time.service;
 
-import com.mj.time.service.dto.AuthUserDto;
+import com.mj.time.service.dto.AuthLoginDto;
+import com.mj.time.service.dto.WXAuthLoginDto;
 
 public interface AuthService {
-    AuthUserDto login(AuthUserDto authUserDto);
+    AuthLoginDto login(AuthLoginDto authLoginDto);
+
+    WXAuthLoginDto wxLogin(WXAuthLoginDto WXAuthLoginDto);
 }
